@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-
 const HotelRecommendations = ({ destination, budget, aiHotelRecommendations = [] }) => {
   const [hotels, setHotels] = useState([]);
   
@@ -13,19 +12,30 @@ const HotelRecommendations = ({ destination, budget, aiHotelRecommendations = []
     }
     
     // Format AI hotel recommendations for display
-    const formattedHotels = aiHotelRecommendations.map((hotel, index) => ({
-      name: hotel.name,
-      image: hotel.image || defaultHotelImages[index % defaultHotelImages.length],
-      description: hotel.description,
-      price: hotel.priceRange || (budget === "luxury" ? "€€€" : (budget === "medium" ? "€€" : "€")),
-      rating: hotel.rating || (4.0 + (Math.random() * 0.9)).toFixed(1), // Generate a random rating if not provided
-      amenities: hotel.amenities || ["Free Wifi", "Breakfast", "Air Conditioning"]
-    }));
+    // Only include hotels that have all required information 
+    // and ensure we're using real Gemini-generated images
+    const formattedHotels = aiHotelRecommendations
+      .filter(hotel => hotel.name && hotel.description)
+      .map((hotel) => {
+        // Ensure we're using a Gemini-generated image URL if available
+        const hotelImage = hotel.imageUrl || hotel.image || null;
+        
+        return {
+          name: hotel.name,
+          image: hotelImage,
+          description: hotel.description,
+          price: hotel.priceRange || (budget === "luxury" ? "€€€" : (budget === "medium" ? "€€" : "€")),
+          rating: hotel.rating || (4.0 + (Math.random() * 0.9)).toFixed(1),
+          amenities: hotel.amenities || ["Free Wifi", "Breakfast"]
+        };
+      })
+      // Only include hotels that have images
+      .filter(hotel => hotel.image);
     
     setHotels(formattedHotels);
-  }, [aiHotelRecommendations, budget]);
+  }, [aiHotelRecommendations, budget, destination]);
 
-  // Don't render anything if there are no hotels
+  // Don't render anything if there are no hotels with images
   if (hotels.length === 0) {
     return null;
   }
@@ -43,6 +53,7 @@ const HotelRecommendations = ({ destination, budget, aiHotelRecommendations = []
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
+            {/* Hotel Image - Only real Gemini-generated images */}
             <div 
               className="h-48 bg-cover bg-center" 
               style={{ backgroundImage: `url(${hotel.image})` }}
