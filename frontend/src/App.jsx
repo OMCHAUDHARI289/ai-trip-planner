@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import WhyThisWebsite from "./components/WhyThisWebsite";
 import ReviewPage from "./components/ReviewPage";
+import PlanTrip from "./pages/PlanTrip";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
             <Route path="/explore" element={<WhyThisWebsite />} /> {/* Explore */}
             <Route path="/reviews" element={<ReviewPage />} /> {/* Reviews */}
             <Route path="/feedback" element={<ReviewPage />} /> {/* Feedback */}
+            <Route path="/plan-trip" element={<PlanTrip />} /> {/* AI Trip Planner */}
           </Routes>
         </div>
       </div>

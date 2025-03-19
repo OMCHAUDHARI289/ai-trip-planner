@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const WhyThisWebsite = () => {
   return (
@@ -70,16 +71,17 @@ const WhyThisWebsite = () => {
       </motion.div>
 
       {/* Plan Your Trip Now Button */}
-      <motion.a
-        href="#plan-your-trip"
-        className="mt-12 px-8 py-4 text-lg font-semibold text-white bg-blue-500 rounded-full shadow-lg relative overflow-hidden transition-all"
-        initial={{ y: 10, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        whileHover={{ scale: 1.1 }}
-      >
-        Plan Your Trip Now ✈️
-      </motion.a>
+      <Link to="/plan-trip">
+        <motion.button
+          className="mt-12 px-8 py-4 text-lg font-semibold text-white bg-blue-500 rounded-full shadow-lg relative overflow-hidden transition-all"
+          initial={{ y: 10, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          whileHover={{ scale: 1.1 }}
+        >
+          Plan Your Trip Now ✈️
+        </motion.button>
+      </Link>
     </section>
   );
 };
