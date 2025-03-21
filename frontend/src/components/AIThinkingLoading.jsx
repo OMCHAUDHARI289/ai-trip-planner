@@ -16,7 +16,7 @@ const AIThinkingLoading = ({ text = "AI is thinking", formData = {} }) => {
       case "luxury":
         return "₹₹₹";
       default:
-        return "₹₹";
+        return "₹";
     }
   };
   
