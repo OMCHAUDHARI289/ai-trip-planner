@@ -54,7 +54,10 @@ const PlanTrip = () => {
       setError("We couldn't generate your trip plan. Please try again later.");
       setUsedFallback(true);
     } finally {
-      setIsLoading(false);
+      // Add a slight delay before removing the loading state to prevent flashing
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
   };
   
@@ -144,7 +147,11 @@ const PlanTrip = () => {
               {tripPlan.estimatedCost && (
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Estimated Cost</h3>
-                  <p>{tripPlan.estimatedCost}</p>
+                  <p>{tripPlan.estimatedCost.replace(/€+|₹+|\$+/g, '').trim() ? 
+                      "₹" + tripPlan.estimatedCost.replace(/€+|₹+|\$+/g, '').trim() : 
+                      formData?.budget === "budget" ? "₹ Budget-friendly" : 
+                      formData?.budget === "medium" ? "₹₹ Moderate" : "₹₹₹ Luxury"}
+                  </p>
                 </div>
               )}
             </div>
@@ -186,11 +193,14 @@ const PlanTrip = () => {
             
             {/* Only show hotel recommendations if AI provided them */}
             {tripPlan.hotelRecommendations && tripPlan.hotelRecommendations.length > 0 && (
-            <HotelRecommendations 
-              destination={tripPlan.destination}
+              <HotelRecommendations 
+                destination={tripPlan.destination}
                 budget={formData?.budget || "medium"}
-              aiHotelRecommendations={tripPlan.hotelRecommendations}
-            />
+                aiHotelRecommendations={tripPlan.hotelRecommendations.map(hotel => ({
+                  ...hotel,
+                  priceRange: hotel.priceRange.replace(/€+/g, '₹').replace(/\$+/g, '₹')
+                }))}
+              />
             )}
             
             <div className="flex flex-col sm:flex-row gap-4 mt-8">

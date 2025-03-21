@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AIThinkingLoading from "./AIThinkingLoading";
 
+
 const TripPlanForm = ({ onSubmit, isLoading, error }) => {
   const [formData, setFormData] = useState({
     startDestination: "",
@@ -236,13 +237,74 @@ const TripPlanForm = ({ onSubmit, isLoading, error }) => {
                 <div className="absolute inset-4 bg-black/40 backdrop-blur-md rounded-full" />
               </div>
               
-              {/* Text with animated dots */}
-              <AIThinkingLoading text="AI is planning your trip" />
+              {/* Replace the old text with animated dots with our new component */}
+              <AIThinkingLoading text="Creating your perfect vacation" formData={formData} />
+              
+              {/* Add some travel icons that move */}
+              <div className="flex justify-center items-center mt-6 space-x-8">
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0],
+                    rotate: [0, 5, 0, -5, 0]
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="text-3xl"
+                >
+                  ✈️
+                </motion.div>
+                <motion.div
+                  animate={{
+                    y: [0, -8, 0],
+                    rotate: [0, -5, 0, 5, 0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5
+                  }}
+                  className="text-3xl"
+                >
+                  🏝️
+                </motion.div>
+                <motion.div
+                  animate={{
+                    y: [0, -12, 0],
+                    rotate: [0, 8, 0, -8, 0]
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1
+                  }}
+                  className="text-3xl"
+                >
+                  🧳
+                </motion.div>
+              </div>
               
               <p className="mt-6 text-center max-w-md">
                 We're analyzing {formData.interests.length > 0 ? formData.interests.join(", ") : "your interests"} 
-                to create your perfect {formData.budget} itinerary for {formData.travelers} {formData.travelers === 1 ? "traveler" : "travelers"}.
+                to create your perfect {formData.budget === "budget" ? "₹" : formData.budget === "medium" ? "₹₹" : "₹₹₹"} itinerary for {formData.travelers} {formData.travelers === 1 ? "traveler" : "travelers"}.
               </p>
+              
+              {/* Add a fun fact about travel */}
+              <motion.div 
+                className="mt-8 p-4 bg-white/10 backdrop-blur-sm rounded-lg max-w-md"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2 }}
+              >
+                <p className="italic text-sm text-center">
+                  "Did you know? The average trip planning takes 8-24 hours spread over 4-12 weeks.
+                  Our AI does it in seconds!"
+                </p>
+              </motion.div>
             </div>
           </motion.div>
         )}
